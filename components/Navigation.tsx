@@ -23,7 +23,7 @@ const Navigation: React.FC<NavigationProps> = ({
   const [langOpen, setLangOpen] = useState(false)
   const [logoClicks, setLogoClicks] = useState(0)
 
-  // 🔐 Hidden admin access (click logo 5 times)
+  // hidden admin click (optional)
   useEffect(() => {
     if (logoClicks === 5) {
       setCurrentPage('admin-portal')
@@ -33,11 +33,11 @@ const Navigation: React.FC<NavigationProps> = ({
     return () => clearTimeout(timer)
   }, [logoClicks, setCurrentPage])
 
-  const languages: { code: Language; label: string; native: string }[] = [
-    { code: 'en', label: 'English', native: 'English' },
-    { code: 'ne', label: 'Nepali', native: 'नेपाली' },
-    { code: 'hi', label: 'Hindi', native: 'हिन्दी' },
-  ]
+  const languages = [
+    { code: 'en', native: 'English' },
+    { code: 'ne', native: 'नेपाली' },
+    { code: 'hi', native: 'हिन्दी' },
+  ] as { code: Language; native: string }[]
 
   const navItems = [
     { id: 'home', en: 'Home', ne: 'घर', hi: 'होम' },
@@ -47,54 +47,50 @@ const Navigation: React.FC<NavigationProps> = ({
   ]
 
   const currentLangLabel =
-    languages.find((l) => l.code === language)?.native || 'English'
+    languages.find(l => l.code === language)?.native || 'English'
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center h-20">
 
-          {/* LOGO + NAME */}
+          {/* ✅ LOGO + NAME */}
           <div
-            className="flex items-center cursor-pointer select-none"
-            onClick={() => setLogoClicks((p) => p + 1)}
+            className="flex items-center cursor-pointer"
+            onClick={() => setLogoClicks(p => p + 1)}
           >
             <img
-              src="/logo.png"
+              src="/image/logo.png"
               alt="Church Logo"
-              className="h-10 w-10 object-contain mr-3"
+              className="h-12 w-12 object-contain mr-3"
             />
             <div>
-              <div className="font-bold text-lg text-slate-900">
-                {churchName}
-              </div>
-              <div className="text-xs text-gray-500">
-                {location}
-              </div>
+              <div className="font-bold text-lg">{churchName}</div>
+              <div className="text-xs text-gray-500">{location}</div>
             </div>
           </div>
 
           {/* DESKTOP MENU */}
           <div className="hidden lg:flex items-center space-x-6">
-            {navItems.map((item) => (
+            {navItems.map(item => (
               <button
                 key={item.id}
                 onClick={() => setCurrentPage(item.id)}
-                className={`text-sm font-bold transition ${
+                className={`text-sm font-bold ${
                   currentPage === item.id
                     ? 'text-blue-700'
-                    : 'text-gray-600 hover:text-blue-700'
+                    : 'text-gray-600'
                 }`}
               >
                 {item[language as keyof typeof item] || item.en}
               </button>
             ))}
 
-            {/* LANGUAGE DROPDOWN */}
+            {/* LANGUAGE */}
             <div className="relative">
               <button
                 onClick={() => setLangOpen(!langOpen)}
-                className="flex items-center gap-2 text-sm font-bold text-gray-700"
+                className="flex items-center gap-2 text-sm font-bold"
               >
                 <Globe size={14} />
                 {currentLangLabel}
@@ -102,15 +98,15 @@ const Navigation: React.FC<NavigationProps> = ({
               </button>
 
               {langOpen && (
-                <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-lg overflow-hidden">
-                  {languages.map((lang) => (
+                <div className="absolute right-0 mt-2 bg-white shadow rounded-lg">
+                  {languages.map(lang => (
                     <button
                       key={lang.code}
                       onClick={() => {
                         changeLanguage(lang.code)
                         setLangOpen(false)
                       }}
-                      className="block w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+                      className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
                     >
                       {lang.native}
                     </button>
@@ -133,14 +129,14 @@ const Navigation: React.FC<NavigationProps> = ({
       {/* MOBILE MENU */}
       {isOpen && (
         <div className="lg:hidden bg-white border-t">
-          {navItems.map((item) => (
+          {navItems.map(item => (
             <button
               key={item.id}
               onClick={() => {
                 setCurrentPage(item.id)
                 setIsOpen(false)
               }}
-              className="block w-full text-left px-6 py-4 font-bold text-gray-700 border-b"
+              className="block w-full text-left px-6 py-4 font-bold text-gray-700"
             >
               {item[language as keyof typeof item] || item.en}
             </button>
