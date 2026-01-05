@@ -1,0 +1,8 @@
+
+{
+  "name": "Utsaha Jagrity Mandali",
+  "description": "Official website for Utsaha Jagrity Mandali. Main location at Gokarneshwor Banquet, Kathmandu, Nepal. Committed to worship, community, and spreading the Gospel.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
